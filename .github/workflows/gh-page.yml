@@ -1,0 +1,25 @@
+name: Github Page
+on:
+    push:
+        branches:
+            - master
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - run: npm install
+            - run: npx ng build
+            - run: |
+                  mv dist docs
+                  cp docs/index.html docs/404.html
+            - run: |
+                  git config --global user.name Ethereal
+                  git config --global user.email ethereal97@gmail.com
+                  git checkout --orphan gh-pages
+                  git add --all
+                  git commit -m 'Github Page'
+                  git push origin gh-pages --force
